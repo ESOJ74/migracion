@@ -75,7 +75,7 @@ def trackers(plant_id):
     df_7.to_csv('GOO.signal_relations_trackers.csv', index=False)
     print(df_7)
 
-inverters('13')
+#inverters('13')
 #trackers('12')
 
 
