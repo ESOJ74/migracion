@@ -5,17 +5,17 @@ import pandas as pd
 from commons.SQLConnections import get_df
 import numpy as np
 
-def query_assets_definition(device_type):
+def query_assets_definition(device_type, plant_id):
     query = f'''select id, path
-               from am.assets_definition where plant_id='12' and type = '{device_type}' order by id'''
+               from am.assets_definition where plant_id='{plant_id}' and type = '{device_type}' order by id'''
     return get_df(query)
 
 
 
 def read_excel_data():
-    with pd.ExcelFile(glob.glob('datosplantas/GOO/*.xlsx')[0]) as xlsx_file:
-        df_parents_child = xlsx_file.parse(sheet_name='GOYM_ISOTROL_GOO')[
-            ['Address (nombre interno)', 'Device Type2', 'Device Code']]
+    with pd.ExcelFile(glob.glob('datosplantas/MOR/*.xlsx')[0]) as xlsx_file:
+        df_parents_child = xlsx_file.parse(sheet_name='GOYM_ISOTROL_MOR')[
+            ['Address (nombre interno)', 'Device Type', 'Device Code']]
     return df_parents_child
 
 # TODO Rename this here and in `inverters`
@@ -25,8 +25,8 @@ def _extracted_from_inverters_6(df, arg1):
     result['signal_name'] = arg1    
     return result
 
-def inverters():
-    df = query_assets_definition('Inverter')
+def inverters(plant_id):
+    df = query_assets_definition('Inverter', plant_id)
     df['provider'] = 'isotrol'    
 
     df_2 = _extracted_from_inverters_6(df, 'Act_Energy_D')
@@ -49,10 +49,10 @@ def inverters():
     df_7.to_csv('MOR.signal_relations.csv', index=False)
     print(df_7)
 
-#inverters()
+
     
-def trackers():
-    df = query_assets_definition('Tracker')
+def trackers(plant_id):
+    df = query_assets_definition('Tracker', plant_id)
     df['provider'] = 'isotrol'    
     
     df_2 = _extracted_from_inverters_6(df, 'Trk_Inclin')
@@ -75,6 +75,7 @@ def trackers():
     df_7.to_csv('GOO.signal_relations_trackers.csv', index=False)
     print(df_7)
 
-#trackers()
+inverters('13')
+#trackers('12')
 
 
