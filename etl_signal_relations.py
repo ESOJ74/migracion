@@ -75,5 +75,6 @@ def trackers():
     df_7.to_csv('GOO.signal_relations_trackers.csv', index=False)
     print(df_7)
 
-trackers()
+#trackers()
+
 
